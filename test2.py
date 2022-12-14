@@ -252,10 +252,6 @@ while running:
                 with open('highscore.txt', 'w') as f:
                     f.write(str(score))
         
-    
-
-        
-
     # Flip the display
     pygame.display.flip()
 
