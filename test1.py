@@ -179,9 +179,9 @@ while running:
         #     all_sprites.add(new_armor)
 
     # Responsible for spawning armor   
-    for entity in all_sprites:
-        if type(entity) == armor:
-            armor_check = True
+    # for entity in all_sprites:
+    #     if type(entity) == armor:
+    #         armor_check = True
 
     if ENEMIES_DEFEATED % 10 == 0 and armor_check == False:
         # Create the new armor and add it to sprite groups

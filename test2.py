@@ -70,7 +70,7 @@ class Enemy(pygame.sprite.Sprite):
             )
         )
         # self.speed = random.randint(5, 20)
-        self.speed = random.gauss(mu=10, sigma=10)
+        self.speed = random.gauss(mu=30, sigma=10)
 
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
@@ -108,13 +108,11 @@ class Armor(pygame.sprite.Sprite):
         self.rect.move_ip(-self.speed, 0)
         if self.rect.right < 0:
             self.kill()
-            armor_check = False
 
         if pygame.sprite.spritecollideany(player, armors,):
 
             player.health+=1
             self.kill()
-            armor_check = False
 class Health(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Health, self).__init__()
@@ -197,12 +195,19 @@ while running:
         #     armors.add(new_armor)
         #     all_sprites.add(new_armor)
         
-    if ENEMIES_DEFEATED % 10 == 0 and armor_check == False and player.health<=3:
+    # Responsible for spawning armor   
+    # for entity in all_sprites:
+    #     if type(entity) == armor:
+    #         armor_check = True
+
+    if ENEMIES_DEFEATED % 10 == 0 and armor_check == False:
         # Create the new armor and add it to sprite groups
         new_armor = Armor()
         armors.add(new_armor)
         all_sprites.add(new_armor)
         armor_check = True
+    else:
+        armor_check = False
 
     if player.health >= 1:
         new_health = Health(100,100)
