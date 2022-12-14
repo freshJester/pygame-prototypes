@@ -1,0 +1,67 @@
+Getting set up with a basic programming environment
+
+Windows
+1) Install the following software before to get started:
+   - Visual Studio Code (VSC) from https://code.visualstudio.com/download
+   - Git bash from https://git-scm.com/downloads , 
+   - (If you're setting up a Python workspace) Python, make sure to check the "Add to Path" box when going through the installer: https://www.python.org/downloads/windows/
+2) Create a folder where code will live on your computer, put it somewhere you can find it with a name you'll remember, (for example, I usually put mine in my Documents folder, name it "Code")
+3) Set up VSC
+   - Open VSC, in the left bar, click "Open Folder" and open the folder you created for code in the last step
+   - Go to File > Preferences > Settings > Search "terminal integrated default profile" > Set the Windows dropdown to "Git Bash" > Close the Settings tab
+   - Terminal > New Terminal
+   - Check the right side of the terminal to confirm that the new terminal is a "bash" terminal
+   - (If you're setting up a Python workspace) In the terminal type "python -v" and hit enter, "python x.x.x" (with the correct version number) should be shown 
+   - Save this workspace to your code folder so you don't lose it:
+      - File > Save Workspace As...  (title it something like "basic-bash", I'd reccomend storing this in your Code folder, you can later open this workspace just by double-clicking this workspace file)
+5) (Optional, useful if you plan working on multiple programming projects) Create a virtual environment for this project by running these commands in the terminal
+   - pip install virtualenv
+   - virtualenv game_env
+   - source ./game_env/Scripts/activate
+
+Linux
+...
+
+
+
+Getting set up with a Git repository project
+1) Create a Github account
+2) Go to the project you want to work with, in the top right of the main project screen there should be a fork button, fork the repository (this allows you to have your own version of the repo)
+3) In your forked repo, click code and copy the HTTPS link
+4) Open your VSC workspace we created, if a terminal doesn't open automatically, open it:
+   - Terminal > New Terminal
+5) Ensure you're terminal is in your Code folder by looking at the path bash displays, if you're not in your code folder, here are some terminal commands that will help you get there:
+   - ls (short for "list", displays all folders/files in the folder you're currently in)
+   - cd (short for "change directory", use this to connect to any of the folders you saw using the ls command, or use "cd .." to back out of a folder)
+6) Clone the your forked repo (paste the link you copied from your forked git repo):
+   - git clone <link> 
+7) cd into the repo:
+   - cd <your-repo-name>
+8) Run the main python file:
+   - python main.py (might have a different name, the project's README.md should have some insight)
+9) (If it doesn't run due to a missing dependency) Install necessary Python packages:
+   - pip install <package-name>
+10) To edit the python file, click and drag the file in the left file explorer windo into your editing space (above the terminal)
+11) To run:
+   - source ./game_env/Scripts/activate
+   - cd ./pygame_prototypes
+   - python test1.py
+
+
+Index
+Circular Dependency - Check out the definition for Directory :)
+Dependency - A package that the current project requires to run
+Directory - Also known as a Folder
+Folder - Also known as a Directory
+Fork - Creating a copy of a Github repository onto your own account, allows you to make changes and push/pull to your own version without affecting the original developer's version unless you create a pull request for your fork
+Git repository - server-side place where code is stored 
+IDE (Integrated Development Environment) - Software space for development
+Repo - Git repository, server-side place where code is stored 
+VSC (Visual Studio Code) - An integrated development environment (IDE)
+
+
+Linux Command Index
+cat - list the contents of a file
+cd <directory-name> <..> - change directory
+ls - list
+
