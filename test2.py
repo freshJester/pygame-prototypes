@@ -79,12 +79,27 @@ class Enemy(pygame.sprite.Sprite):
         global score
 
         self.rect.move_ip(-self.speed, 0)
+
+        # If this enemy has gone beyond the left border, destroy it, add count to enemies defeated
         if self.rect.right < 0:
             self.kill()
             ENEMIES_DEFEATED += 1
 
             score += 1
 
+        # Check if any enemies have collided with the player
+        if pygame.sprite.spritecollideany(player, enemies,):
+            global running
+            player.health -= 1
+            if player.health < 1:
+                player.kill()
+                running = False
+
+                # If score higher than the high score save the high score to a txt file
+                if score > int(highscore):
+                    with open('highscore.txt', 'w') as f:
+                        f.write(str(score))
+            self.kill()
 
 
 # Define the armor object by extending pygame.sprite.Sprite
@@ -113,6 +128,8 @@ class Armor(pygame.sprite.Sprite):
 
             player.health+=1
             self.kill()
+
+
 class Health(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Health, self).__init__()
@@ -122,11 +139,6 @@ class Health(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(  
             center=(x, y)
         )
-
-        # self.speed = random.randint(5, 20)
-        self.speed = 30
-    # Move the sprite based on speed
-    # Remove the sprite when it passes the left edge of the screen
    
 
 
@@ -238,19 +250,6 @@ while running:
     # Draw all sprites
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)  # .blit() (Block Transfer) - transfers contents from one surface to another
-
-    # Check if any enemies have collided with the player
-    if pygame.sprite.spritecollideany(player, enemies,):
-        # If so, then remove the player and stop the loop
-        player.health -= 1
-        if player.health<1:
-            player.kill()
-            running = False
-
-            # Save the high score to a txt file, if score higher than the high score
-            if score > int(highscore):
-                with open('highscore.txt', 'w') as f:
-                    f.write(str(score))
         
     # Flip the display
     pygame.display.flip()
