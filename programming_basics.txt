@@ -43,9 +43,9 @@ Getting set up with a Git repository project
    - pip install <package-name>
 10) To edit the python file, click and drag the file in the left file explorer windo into your editing space (above the terminal)
 11) To run:
-   - source ./game_env/Scripts/activate
+   - (if you set up a virtual environment) source ./game_env/Scripts/activate
    - cd ./pygame_prototypes
-   - python test1.py
+   - python <name_of_file>.py
 
 
 Index
