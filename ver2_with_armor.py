@@ -213,7 +213,7 @@ while running:
     #     if type(entity) == armor:
     #         armor_check = True
 
-    if score % 10 == 0:
+    if score % 10 == 0 and score != 0:
         # Create the new armor and add it to sprite groups
         new_armor = Armor()
         armors.add(new_armor)
