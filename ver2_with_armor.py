@@ -70,7 +70,7 @@ class Enemy(pygame.sprite.Sprite):
             )
         )
         # self.speed = random.randint(5, 20)
-        self.speed = random.gauss(mu=30, sigma=5)
+        self.speed = random.gauss(mu=22, sigma=3)
 
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
@@ -109,6 +109,7 @@ class Armor(pygame.sprite.Sprite):
         super(Armor, self).__init__()
         self.surf = pygame.Surface((30, 30))  # Size of the hitbox
         self.surf.fill((0, 0, 255))  # Blue
+        self.speed = random.randint(25, 35)  # Speed
         # Where spawn
         self.rect = self.surf.get_rect(  
             center=(
@@ -116,8 +117,6 @@ class Armor(pygame.sprite.Sprite):
                 random.randint(0, SCREEN_HEIGHT),
             )
         )
-        # self.speed = random.randint(5, 20)
-        self.speed = 30
 
     def update(self, player):
         global armor_check
@@ -155,7 +154,7 @@ if __name__ == "__main__":
     # Create a custom event for adding a new enemy
     ADDENEMY = pygame.USEREVENT + 1
     # pygame.time.set_timer(ADDENEMY, 250)
-    pygame.time.set_timer(ADDENEMY, 100)
+    pygame.time.set_timer(ADDENEMY, 85)
 
     # Create a custome event for adding a armor powerup
     # ADDARMOR = pygame.USEREVENT + 2
