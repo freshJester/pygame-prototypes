@@ -21,7 +21,7 @@ from pygame.locals import (
 )
 
 # Define constants for the screen width and height
-SCREEN_WIDTH = 2000
+SCREEN_WIDTH = 1900
 SCREEN_HEIGHT = 1000
 
 ENEMIES_DEFEATED = 0
@@ -70,7 +70,7 @@ class Enemy(pygame.sprite.Sprite):
             )
         )
         # self.speed = random.randint(5, 20)
-        self.speed = random.gauss(mu=55, sigma=10)
+        self.speed = random.gauss(mu=30, sigma=5)
 
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
@@ -79,11 +79,27 @@ class Enemy(pygame.sprite.Sprite):
         global score
 
         self.rect.move_ip(-self.speed, 0)
+
+        # If this enemy has gone beyond the left border, destroy it, add count to enemies defeated
         if self.rect.right < 0:
             self.kill()
             ENEMIES_DEFEATED += 1
+
             score += 1
 
+        # Check if any enemies have collided with the player
+        if pygame.sprite.spritecollideany(player, enemies,):
+            global running
+            player.health -= 1
+            if player.health < 1:
+                player.kill()
+                running = False
+
+                # If score higher than the high score save the high score to a txt file
+                if score > int(highscore):
+                    with open('highscore.txt', 'w') as f:
+                        f.write(str(score))
+            self.kill()
 
 
 # Define the armor object by extending pygame.sprite.Sprite
@@ -102,17 +118,28 @@ class Armor(pygame.sprite.Sprite):
         )
         # self.speed = random.randint(5, 20)
         self.speed = 30
-
-    # Move the sprite based on speed
-    # Remove the sprite when it passes the left edge of the screen
     def update(self, player):
+        global armor_check
         self.rect.move_ip(-self.speed, 0)
         if self.rect.right < 0:
             self.kill()
 
         if pygame.sprite.spritecollideany(player, armors,):
+
             player.health+=1
             self.kill()
+
+
+class Health(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super(Health, self).__init__()
+        self.surf = pygame.Surface((30, 30))  # Size of the hitbox
+        self.surf.fill((136, 8, 8))  # Red
+        # Where spawn
+        self.rect = self.surf.get_rect(  
+            center=(x, y)
+        )
+   
 
 
 # Initialize pygame
@@ -140,6 +167,7 @@ player = Player()
 # - all_sprites is used for rendering
 enemies = pygame.sprite.Group()
 armors = pygame.sprite.Group()
+health = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 
@@ -148,8 +176,8 @@ running = True
 
 # Run until the user asks to quit
 running = True
+armor_check=False
 score = 0
-armor_check = False
 while running:
     print("PLAYER.HEALTH: ", player.health)
     # Did the user click the window close button?
@@ -171,27 +199,32 @@ while running:
             enemies.add(new_enemy)
             all_sprites.add(new_enemy)
 
+
         # # Add powerup?
         # elif event.type == ADDARMOR and ENEMIES_DEFEATED == 10:
         #     # Create the new armor and add it to sprite groups
         #     new_armor = Armor()
         #     armors.add(new_armor)
         #     all_sprites.add(new_armor)
-
+        
     # Responsible for spawning armor   
     # for entity in all_sprites:
     #     if type(entity) == armor:
     #         armor_check = True
 
-    if ENEMIES_DEFEATED % 10 == 0 and armor_check == False:
-        # Create the new armor and add it to sprite groups
-        new_armor = Armor()
-        armors.add(new_armor)
-        all_sprites.add(new_armor)
-        armor_check = True
-    else:
-        armor_check = False
+    # if ENEMIES_DEFEATED % 100 == 0 and armor_check == False:
+    #     # Create the new armor and add it to sprite groups
+    #     new_armor = Armor()
+    #     armors.add(new_armor)
+    #     all_sprites.add(new_armor)
+    #     armor_check = True
+    # else:
+    #     armor_check = False
 
+    if player.health >= 1:
+        new_health = Health(100,100)
+        health.add(new_health)
+        all_sprites.add(new_health)
 
     # Draw a solid blue circle in the center
     # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
@@ -211,26 +244,13 @@ while running:
     screen.fill((0, 0, 0))
 
     # Draw in the score
-    text_surface, rect = GAME_FONT.render("High score: " + highscore + "--Current score: " + str(score), (255, 255, 255))
+    text_surface, rect = GAME_FONT.render("High score: " + highscore + "--Current score: " + str(score) + "--player.health: " +str(player.health), (255, 255, 255))
     screen.blit(text_surface, ((SCREEN_WIDTH/2)-100, 10))
 
     # Draw all sprites
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)  # .blit() (Block Transfer) - transfers contents from one surface to another
-
-    # Check if any enemies have collided with the player
-    if pygame.sprite.spritecollideany(player, enemies,):
-        # If so, then remove the player and stop the loop
-        player.health -= 1
-        if player.health<1:
-            player.kill()
-            running = False
-
-        # Save the high score to a txt file, if score higher than the high score
-        if score > int(highscore):
-            with open('highscore.txt', 'w') as f:
-                f.write(str(score))
-
+        
     # Flip the display
     pygame.display.flip()
 

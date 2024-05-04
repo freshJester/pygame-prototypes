@@ -21,7 +21,7 @@ from pygame.locals import (
 )
 
 # Define constants for the screen width and height
-SCREEN_WIDTH = 2000
+SCREEN_WIDTH = 1900
 SCREEN_HEIGHT = 1000
 
 ENEMIES_DEFEATED = 0
@@ -70,7 +70,7 @@ class Enemy(pygame.sprite.Sprite):
             )
         )
         # self.speed = random.randint(5, 20)
-        self.speed = random.gauss(mu=30, sigma=10)
+        self.speed = random.gauss(mu=30, sigma=5)
 
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
@@ -212,7 +212,7 @@ while running:
     #     if type(entity) == armor:
     #         armor_check = True
 
-    if ENEMIES_DEFEATED % 10 == 0 and armor_check == False:
+    if ENEMIES_DEFEATED % 100 == 0 and armor_check == False:
         # Create the new armor and add it to sprite groups
         new_armor = Armor()
         armors.add(new_armor)
