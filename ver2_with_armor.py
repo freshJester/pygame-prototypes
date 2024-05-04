@@ -177,10 +177,12 @@ running = True
 
 # Run until the user asks to quit
 running = True
-armor_check=False
 score = 0
+time = 0
 while running:
     print("PLAYER.HEALTH: ", player.health)
+    time += 1
+
     # Did the user click the window close button?
     for event in pygame.event.get():
         # Did the user hit a key?
@@ -213,7 +215,7 @@ while running:
     #     if type(entity) == armor:
     #         armor_check = True
 
-    if score % 10 == 0 and score != 0:
+    if time % 100 == 0 and time != 0:
         # Create the new armor and add it to sprite groups
         new_armor = Armor()
         armors.add(new_armor)
@@ -230,6 +232,7 @@ while running:
 
     # Get all keys currently pressed
     pressed_keys = pygame.key.get_pressed()
+
     # Update the player sprite based on user keypress
     player.update(pressed_keys)
 
