@@ -63,6 +63,7 @@ class Enemy(pygame.sprite.Sprite):
         super(Enemy, self).__init__()
         self.surf = pygame.Surface((20, 10))
         self.surf.fill((255, 255, 255))
+        self.speed = random.gauss(mu=22, sigma=3)  # Speed of enemies
         self.rect = self.surf.get_rect(
             center=(
                 random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
@@ -70,7 +71,7 @@ class Enemy(pygame.sprite.Sprite):
             )
         )
         # self.speed = random.randint(5, 20)
-        self.speed = random.gauss(mu=22, sigma=3)
+        
 
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
@@ -130,6 +131,8 @@ class Armor(pygame.sprite.Sprite):
             self.kill()
 
 
+# TODO: This does not currently work
+# Or maybe it does, but the thing that draws it isn't working?
 class Health(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Health, self).__init__()
@@ -154,7 +157,7 @@ if __name__ == "__main__":
     # Create a custom event for adding a new enemy
     ADDENEMY = pygame.USEREVENT + 1
     # pygame.time.set_timer(ADDENEMY, 250)
-    pygame.time.set_timer(ADDENEMY, 85)
+    pygame.time.set_timer(ADDENEMY, 85)  # This is the timer for when each enemy gets added
 
     # Create a custome event for adding a armor powerup
     # ADDARMOR = pygame.USEREVENT + 2
