@@ -118,6 +118,7 @@ class Armor(pygame.sprite.Sprite):
         )
         # self.speed = random.randint(5, 20)
         self.speed = 30
+
     def update(self, player):
         global armor_check
         self.rect.move_ip(-self.speed, 0)
@@ -212,15 +213,13 @@ while running:
     #     if type(entity) == armor:
     #         armor_check = True
 
-    if ENEMIES_DEFEATED % 100 == 0 and armor_check == False:
+    if score % 10 == 0:
         # Create the new armor and add it to sprite groups
         new_armor = Armor()
         armors.add(new_armor)
         all_sprites.add(new_armor)
-        armor_check = True
-    else:
-        armor_check = False
 
+    # TODO: I think this block is trying to draw health in, the red block(s?) in the top right
     if player.health >= 1:
         new_health = Health(100,100)
         health.add(new_health)
