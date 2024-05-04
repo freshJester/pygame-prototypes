@@ -34,7 +34,7 @@ class Player(pygame.sprite.Sprite):
         super(Player, self).__init__()  # Initializes this class as an object of it's parent, sprite
         self.surf = pygame.Surface((75, 25))  # Creates the surface this player will exist on, essentially the "hit box"
         self.surf.fill((255, 255, 255))  # Fills that surface with a color
-        self.rect = self.surf.get_rect(center=(250, SCREEN_HEIGHT/2))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
+        self.rect = self.surf.get_rect(center=(500, SCREEN_HEIGHT/2))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
         self.health = 1
 
     # Move the sprite based on user keypresses
@@ -142,121 +142,121 @@ class Health(pygame.sprite.Sprite):
         )
    
 
+if __name__ == "__main__":
+    # Initialize pygame
+    pygame.init()
 
-# Initialize pygame
-pygame.init()
+    # Set up the drawing window
+    screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+    GAME_FONT = pygame.freetype.Font("ConnectionIii-Rj3W.otf", 24)
+    with open("highscore.txt", "r") as f:
+        highscore = f.read()
 
-# Set up the drawing window
-screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
-GAME_FONT = pygame.freetype.Font("ConnectionIii-Rj3W.otf", 24)
-with open("highscore.txt", "r") as f:
-    highscore = f.read()
+    # Create a custom event for adding a new enemy
+    ADDENEMY = pygame.USEREVENT + 1
+    # pygame.time.set_timer(ADDENEMY, 250)
+    pygame.time.set_timer(ADDENEMY, 100)
 
-# Create a custom event for adding a new enemy
-ADDENEMY = pygame.USEREVENT + 1
-# pygame.time.set_timer(ADDENEMY, 250)
-pygame.time.set_timer(ADDENEMY, 100)
+    # Create a custome event for adding a armor powerup
+    # ADDARMOR = pygame.USEREVENT + 2
 
-# Create a custome event for adding a armor powerup
-# ADDARMOR = pygame.USEREVENT + 2
+    # Instantiate player. Right now, this is just a rectangle.
+    player = Player()
 
-# Instantiate player. Right now, this is just a rectangle.
-player = Player()
+    # Create groups to hold enemy sprites and all sprites, better than a list because:
+    # - enemies is used for collision detection and position updates
+    # - all_sprites is used for rendering
+    enemies = pygame.sprite.Group()
+    armors = pygame.sprite.Group()
+    health = pygame.sprite.Group()
+    all_sprites = pygame.sprite.Group()
+    all_sprites.add(player)
 
-# Create groups to hold enemy sprites and all sprites, better than a list because:
-# - enemies is used for collision detection and position updates
-# - all_sprites is used for rendering
-enemies = pygame.sprite.Group()
-armors = pygame.sprite.Group()
-health = pygame.sprite.Group()
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
+    # Variable to keep the main loop running
+    running = True
 
-# Variable to keep the main loop running
-running = True
+    # Run until the user asks to quit
+    running = True
+    score = 0
+    time = 0
+    while running:
+        print("PLAYER.HEALTH: ", player.health)
+        time += 1
 
-# Run until the user asks to quit
-running = True
-score = 0
-time = 0
-while running:
-    print("PLAYER.HEALTH: ", player.health)
-    time += 1
+        # Did the user click the window close button?
+        for event in pygame.event.get():
+            # Did the user hit a key?
+            if event.type == KEYDOWN:
+                # Was it the Escape key? If so, stop the loop.
+                if event.key == K_ESCAPE:
+                    running = False
 
-    # Did the user click the window close button?
-    for event in pygame.event.get():
-        # Did the user hit a key?
-        if event.type == KEYDOWN:
-            # Was it the Escape key? If so, stop the loop.
-            if event.key == K_ESCAPE:
+            # Did the user click the window close button? If so, stop the loop.
+            elif event.type == pygame.QUIT:
                 running = False
+                
+            # Add a new enemy?
+            elif event.type == ADDENEMY:
+                # Create the new enemy and add it to sprite groups
+                new_enemy = Enemy()
+                enemies.add(new_enemy)
+                all_sprites.add(new_enemy)
 
-        # Did the user click the window close button? If so, stop the loop.
-        elif event.type == pygame.QUIT:
-            running = False
+
+            # # Add powerup?
+            # elif event.type == ADDARMOR and ENEMIES_DEFEATED == 10:
+            #     # Create the new armor and add it to sprite groups
+            #     new_armor = Armor()
+            #     armors.add(new_armor)
+            #     all_sprites.add(new_armor)
             
-        # Add a new enemy?
-        elif event.type == ADDENEMY:
-            # Create the new enemy and add it to sprite groups
-            new_enemy = Enemy()
-            enemies.add(new_enemy)
-            all_sprites.add(new_enemy)
+        # Responsible for spawning armor   
+        # for entity in all_sprites:
+        #     if type(entity) == armor:
+        #         armor_check = True
 
+        if time % 100 == 0 and time != 0:
+            # Create the new armor and add it to sprite groups
+            new_armor = Armor()
+            armors.add(new_armor)
+            all_sprites.add(new_armor)
 
-        # # Add powerup?
-        # elif event.type == ADDARMOR and ENEMIES_DEFEATED == 10:
-        #     # Create the new armor and add it to sprite groups
-        #     new_armor = Armor()
-        #     armors.add(new_armor)
-        #     all_sprites.add(new_armor)
-        
-    # Responsible for spawning armor   
-    # for entity in all_sprites:
-    #     if type(entity) == armor:
-    #         armor_check = True
+        # TODO: I think this block is trying to draw health in, the red block(s?) in the top right
+        if player.health >= 1:
+            new_health = Health(100,100)
+            health.add(new_health)
+            all_sprites.add(new_health)
 
-    if time % 100 == 0 and time != 0:
-        # Create the new armor and add it to sprite groups
-        new_armor = Armor()
-        armors.add(new_armor)
-        all_sprites.add(new_armor)
+        # Draw a solid blue circle in the center
+        # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
 
-    # TODO: I think this block is trying to draw health in, the red block(s?) in the top right
-    if player.health >= 1:
-        new_health = Health(100,100)
-        health.add(new_health)
-        all_sprites.add(new_health)
+        # Get all keys currently pressed
+        pressed_keys = pygame.key.get_pressed()
 
-    # Draw a solid blue circle in the center
-    # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
+        # Update the player sprite based on user keypress
+        player.update(pressed_keys)
 
-    # Get all keys currently pressed
-    pressed_keys = pygame.key.get_pressed()
+        # Update enemy position
+        enemies.update(player)
 
-    # Update the player sprite based on user keypress
-    player.update(pressed_keys)
+        # Update armor position
+        armors.update(player)
 
-    # Update enemy position
-    enemies.update(player)
+        # Erase the previous position of the player
+        screen.fill((0, 0, 0))
 
-    # Update armor position
-    armors.update(player)
+        # Draw in the score
+        text_surface, rect = GAME_FONT.render("High score: " + highscore + "--Current score: " + str(score) + "--player.health: " +str(player.health), (255, 255, 255))
+        screen.blit(text_surface, ((SCREEN_WIDTH/2)-100, 10))
 
-    # Erase the previous position of the player
-    screen.fill((0, 0, 0))
+        # Draw all sprites
+        for entity in all_sprites:
+            screen.blit(entity.surf, entity.rect)  # .blit() (Block Transfer) - transfers contents from one surface to another
+            
+        # Flip the display
+        pygame.display.flip()
 
-    # Draw in the score
-    text_surface, rect = GAME_FONT.render("High score: " + highscore + "--Current score: " + str(score) + "--player.health: " +str(player.health), (255, 255, 255))
-    screen.blit(text_surface, ((SCREEN_WIDTH/2)-100, 10))
+        clock.tick(60)  # Ensure frame rate is maintained
 
-    # Draw all sprites
-    for entity in all_sprites:
-        screen.blit(entity.surf, entity.rect)  # .blit() (Block Transfer) - transfers contents from one surface to another
-        
-    # Flip the display
-    pygame.display.flip()
-
-    clock.tick(60)  # Ensure frame rate is maintained
-
-# Done! Time to quit.
-pygame.quit()
+    # Done! Time to quit.
+    pygame.quit()
