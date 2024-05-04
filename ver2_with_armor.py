@@ -11,10 +11,10 @@ clock = pygame.time.Clock()
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards
 from pygame.locals import (
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
+    K_w,
+    K_s,
+    K_a,
+    K_d,
     K_ESCAPE,
     KEYDOWN,
     QUIT,
@@ -40,19 +40,19 @@ class Player(pygame.sprite.Sprite):
     # Move the sprite based on user keypresses
     def update(self, pressed_keys):
         # If "UP" key pressed and we're not above the top
-        if pressed_keys[K_UP] and self.rect.top > 0:
+        if pressed_keys[K_w] and self.rect.top > 0:
             self.rect.move_ip(0, -15)
 
         # If "DOWN" key pressed and we're not below the bottom
-        if pressed_keys[K_DOWN] and self.rect.bottom < SCREEN_HEIGHT:
+        if pressed_keys[K_s] and self.rect.bottom < SCREEN_HEIGHT:
             self.rect.move_ip(0, 15)
 
         # If "LEFT" key pressed and we're not beyond the minimum x-value
-        if pressed_keys[K_LEFT] and self.rect.left >= 0:
+        if pressed_keys[K_a] and self.rect.left >= 0:
             self.rect.move_ip(-20, 0)
 
         # If "RIGHT" key pressed and we're not beyond the maximum x-value
-        if pressed_keys[K_RIGHT] and self.rect.right < SCREEN_WIDTH:
+        if pressed_keys[K_d] and self.rect.right < SCREEN_WIDTH:
             self.rect.move_ip(15, 0)
 
 
