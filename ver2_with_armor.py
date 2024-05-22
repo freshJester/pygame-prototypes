@@ -17,6 +17,7 @@ from pygame.locals import (
     K_d,
     K_ESCAPE,
     KEYDOWN,
+    K_SPACE,
     QUIT,
 )
 
@@ -36,7 +37,8 @@ class Player(pygame.sprite.Sprite):
         self.surf.fill((255, 255, 255))  # Fills that surface with a color
         self.rect = self.surf.get_rect(center=(500, SCREEN_HEIGHT/2))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
         self.health = 1
-
+        self.player_pos_x = 0 #initialize x position of player object
+        self.player_pos_y = 0 #initialize y position of player object
     # Move the sprite based on user keypresses
     def update(self, pressed_keys):
         # If "UP" key pressed and we're not above the top
@@ -54,7 +56,12 @@ class Player(pygame.sprite.Sprite):
         # If "RIGHT" key pressed and we're not beyond the maximum x-value
         if pressed_keys[K_d] and self.rect.right < SCREEN_WIDTH:
             self.rect.move_ip(15, 0)
-
+        
+        # if 'Space" key is pressed get current position of the the player object
+        # Used in Projectile Class   
+        if pressed_keys[K_SPACE]:
+            self.player_pos_x = self.rect.x
+            self.player_pos_y = self.rect.y
 
 # Define the enemy object by extending pygame.sprite.Sprite
 # The surface you draw on the screen is now an attribute of 'enemy'
@@ -101,6 +108,10 @@ class Enemy(pygame.sprite.Sprite):
                     with open('highscore.txt', 'w') as f:
                         f.write(str(score))
             self.kill()
+        # check if the enemy has hit a projectile
+        if pygame.sprite.spritecollideany(self, projectiles):
+            self.kill()
+            score += 1
 
 
 # Define the armor object by extending pygame.sprite.Sprite
@@ -129,8 +140,27 @@ class Armor(pygame.sprite.Sprite):
 
             player.health+=1
             self.kill()
-
-
+            
+# Define the projectile object by extending pygame.sprite.Sprite
+# The surface you draw on the screen is now an attribute of 'projectile'           
+class Projectile(pygame.sprite.Sprite):
+    def __init__(self, player_pos_x, player_pos_y):
+        super(Projectile, self).__init__()
+        self.surf = pygame.Surface((10,10))
+        self.surf.fill((255,0,0)) # red
+        self.speed = 20
+        self.rect = self.surf.get_rect(
+            center = (player_pos_x + 60,
+                      player_pos_y + 10)
+        )
+  
+    def update(self):
+        self.rect.move_ip(self.speed, 0)
+        if self.rect.left > SCREEN_WIDTH:
+            self.kill()
+        if pygame.sprite.spritecollideany(self, enemies):
+            self.kill()
+                   
 # TODO: This does not currently work
 # Or maybe it does, but the thing that draws it isn't working?
 class Health(pygame.sprite.Sprite):
@@ -171,6 +201,7 @@ if __name__ == "__main__":
     enemies = pygame.sprite.Group()
     armors = pygame.sprite.Group()
     health = pygame.sprite.Group()
+    projectiles = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player)
 
@@ -237,13 +268,21 @@ if __name__ == "__main__":
 
         # Update the player sprite based on user keypress
         player.update(pressed_keys)
-
+        
+        # if space pressed generate projectiles
+        if pressed_keys[K_SPACE]:
+            new_projectile = Projectile(player.player_pos_x,player.player_pos_y)
+            projectiles.add(new_projectile)
+            all_sprites.add(new_projectile)
         # Update enemy position
         enemies.update(player)
 
         # Update armor position
         armors.update(player)
 
+        #update projectile position
+        projectiles.update()
+        
         # Erase the previous position of the player
         screen.fill((0, 0, 0))
 
