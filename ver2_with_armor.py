@@ -32,7 +32,11 @@ ENEMIES_DEFEATED = 0
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()  # Initializes this class as an object of it's parent, sprite
-        self.surf = pygame.Surface((75, 25))  # Creates the surface this player will exist on, essentially the "hit box"
+        size = (75, 25)
+        self.surf = pygame.Surface(size)  # Creates the surface this player will exist on, essentially the "hit box"
+        # shipImage = pygame.image.load("assets/fish_ship.png")
+        # shipImage = pygame.transform.scale(shipImage, size).convert()
+        # self.surf.blit(shipImage, size)
         self.surf.fill((255, 255, 255))  # Fills that surface with a color
         self.rect = self.surf.get_rect(center=(500, SCREEN_HEIGHT/2))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
         self.health = 1
