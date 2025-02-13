@@ -68,24 +68,18 @@ class Player(pygame.sprite.Sprite):
 class Wall(pygame.sprite.Sprite):
     def __init__(self):
         super(Wall, self).__init__()
-        self.surf = pygame.Surface((20, 10))
-        self.surf.fill((255, 255, 255))
+        self.surf = pygame.Surface((SCREEN_WIDTH, 100))
+        self.surf.fill((255, 255, 255))  # Fills that surface with color
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
 
-
-
-        self.rect = self.surf.get_rect(
-            center=(
-                random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
-                random.randint(0, SCREEN_HEIGHT),
-            )
-        )
+        # # Randomly chooses a spawn point of the enemy
+        # self.rect = self.surf.get_rect(
+        #     center=(
+        #         random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
+        #         random.randint(0, SCREEN_HEIGHT),
+        #     )
+        # )
         # self.speed = random.randint(5, 20)
-
-
-    # Draw the wall
-    def draw(self):
-        print("thing")
-        
 
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
@@ -214,7 +208,7 @@ if __name__ == "__main__":
 
     # Draw the moon
     wall = Wall()
-    wall.draw()
+    all_sprites.add(wall)
 
     # Variable to keep the main loop running
     running = True
@@ -268,6 +262,7 @@ if __name__ == "__main__":
         #     all_sprites.add(new_armor)
 
         # TODO: I think this block is trying to draw health in, the red block(s?) in the top right
+        # Definitely not what it does currently...
         if player.health >= 1:
             new_health = Health(100,100)
             health.add(new_health)
