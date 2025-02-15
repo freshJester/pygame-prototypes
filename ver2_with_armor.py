@@ -190,7 +190,7 @@ if __name__ == "__main__":
     pygame.time.set_timer(ADDENEMY, 85)  # This is the timer for when each enemy gets added
 
     # Create a custome event for adding a armor powerup
-    # ADDARMOR = pygame.USEREVENT + 2
+    ADDARMOR = pygame.USEREVENT + 2
 
     # Instantiate player. Right now, this is just a rectangle.
     player = Player()
@@ -238,12 +238,12 @@ if __name__ == "__main__":
                 all_sprites.add(new_enemy)
 
 
-            # # Add powerup?
-            # elif event.type == ADDARMOR and ENEMIES_DEFEATED == 10:
-            #     # Create the new armor and add it to sprite groups
-            #     new_armor = Armor()
-            #     armors.add(new_armor)
-            #     all_sprites.add(new_armor)
+            # Add powerup?
+            elif event.type == ADDARMOR and ENEMIES_DEFEATED == 10:
+                # Create the new armor and add it to sprite groups
+                new_armor = Armor()
+                armors.add(new_armor)
+                all_sprites.add(new_armor)
             
         # Responsible for spawning armor   
         # for entity in all_sprites:
