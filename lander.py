@@ -28,6 +28,7 @@ SCREEN_HEIGHT = 1000
 ENEMIES_DEFEATED = 0
 
 
+
 # Define a Player object by extending pygame.sprite.Sprite
 # The surface drawn on the screen is now an attribute of 'player'
 class Player(pygame.sprite.Sprite):
@@ -39,23 +40,26 @@ class Player(pygame.sprite.Sprite):
         self.health = 1
         self.player_pos_x = 0 #initialize x position of player object
         self.player_pos_y = 0 #initialize y position of player object
+        self.x_speed = 0 # x speed, based on user input
+        self.y_speed = 0 # y speed, based on user input
+
     # Move the sprite based on user keypresses
     def update(self, pressed_keys):
         # If "UP" key pressed and we're not above the top
         if pressed_keys[K_w] and self.rect.top > 0:
-            self.rect.move_ip(0, -15)
+            self.x_speed -= 0.01
 
         # If "DOWN" key pressed and we're not below the bottom
         if pressed_keys[K_s] and self.rect.bottom < SCREEN_HEIGHT:
-            self.rect.move_ip(0, 15)
+            self.x_speed += 0.01
 
         # If "LEFT" key pressed and we're not beyond the minimum x-value
         if pressed_keys[K_a] and self.rect.left >= 0:
-            self.rect.move_ip(-20, 0)
+            self.y_speed -= 0.01
 
         # If "RIGHT" key pressed and we're not beyond the maximum x-value
         if pressed_keys[K_d] and self.rect.right < SCREEN_WIDTH:
-            self.rect.move_ip(15, 0)
+            self.y_speed += 0.01
         
         # if 'Space" key is pressed get current position of the the player object
         # Used in Projectile Class   
@@ -218,10 +222,16 @@ if __name__ == "__main__":
     score = 0
     time = 0
     projectile_sleep = 0
+    X_SPEED = 0
+    Y_SPEED = 0
     while running:
         print("PLAYER.HEALTH: ", player.health)
         time += 1
         projectile_sleep += 1
+
+        X_SPEED += player.x_speed
+        Y_SPEED += player.y_speed
+        player.rect.move_ip(Y_SPEED, X_SPEED)
 
         # Did the user click the window close button?
         for event in pygame.event.get():
@@ -234,32 +244,6 @@ if __name__ == "__main__":
             # Did the user click the window close button? If so, stop the loop.
             elif event.type == pygame.QUIT:
                 running = False
-                
-            # # Add a new enemy?
-            # elif event.type == ADDENEMY:
-            #     # Create the new enemy and add it to sprite groups
-            #     new_enemy = Enemy()
-            #     enemies.add(new_enemy)
-            #     all_sprites.add(new_enemy)
-
-
-            # # Add powerup?
-            # elif event.type == ADDARMOR and ENEMIES_DEFEATED == 10:
-            #     # Create the new armor and add it to sprite groups
-            #     new_armor = Armor()
-            #     armors.add(new_armor)
-            #     all_sprites.add(new_armor)
-            
-        # Responsible for spawning armor   
-        # for entity in all_sprites:
-        #     if type(entity) == armor:
-        #         armor_check = True
-
-        # if time % 100 == 0 and time != 0:
-        #     # Create the new armor and add it to sprite groups
-        #     new_armor = Armor()
-        #     armors.add(new_armor)
-        #     all_sprites.add(new_armor)
 
         # TODO: I think this block is trying to draw health in, the red block(s?) in the top right
         # Definitely not what it does currently...
