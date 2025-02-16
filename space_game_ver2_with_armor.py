@@ -180,6 +180,9 @@ class Health(pygame.sprite.Sprite):
 if __name__ == "__main__":
     # Initialize pygame
     pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load("background_music_1.ogg")
+    pygame.mixer.music.play(-1)
 
     # Set up the drawing window
     screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
