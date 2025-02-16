@@ -33,12 +33,15 @@ ENEMIES_DEFEATED = 0
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()  # Initializes this class as an object of it's parent, sprite
-        self.surf = pygame.Surface((75, 25))  # Creates the surface this player will exist on, essentially the "hit box"
-        self.surf.fill((255, 255, 255))  # Fills that surface with a color
-        self.rect = self.surf.get_rect(center=(500, SCREEN_HEIGHT/2))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
+        # self.surf = pygame.Surface((75, 25))  # Creates the surface this player will exist on, essentially the "hit box"
+        # self.surf.fill((255, 255, 255))  # Fills that surface with a color
+        # self.rect = self.surf.get_rect(center=(500, SCREEN_HEIGHT/2))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
+        self.rect = pygame.Rect(500, SCREEN_HEIGHT/2, 16, 16)
+        self.image = pygame.image.load("./assets/fish_ship.png").convert_alpha()
         self.health = 1
         self.player_pos_x = 0 #initialize x position of player object
         self.player_pos_y = 0 #initialize y position of player object
+
     # Move the sprite based on user keypresses
     def update(self, pressed_keys):
         # If "UP" key pressed and we're not above the top
@@ -296,7 +299,10 @@ if __name__ == "__main__":
 
         # Draw all sprites
         for entity in all_sprites:
-            screen.blit(entity.surf, entity.rect)  # .blit() (Block Transfer) - transfers contents from one surface to another
+            try:
+                screen.blit(entity.image, entity.rect)
+            except:
+                screen.blit(entity.surf, entity.rect)  # .blit() (Block Transfer) - transfers contents from one surface to another
             
         # Flip the display
         pygame.display.flip()
