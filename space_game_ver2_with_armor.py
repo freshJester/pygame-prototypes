@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
         # self.surf = pygame.Surface((75, 25))  # Creates the surface this player will exist on, essentially the "hit box"
         # self.surf.fill((255, 255, 255))  # Fills that surface with a color
         # self.rect = self.surf.get_rect(center=(500, SCREEN_HEIGHT/2))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
-        self.rect = pygame.Rect(500, SCREEN_HEIGHT/2, 16, 16)
+        self.rect = pygame.Rect(500, SCREEN_HEIGHT/2, 75, 75)
         self.image = pygame.image.load("./assets/fish_ship.png").convert_alpha()
         self.health = 1
         self.player_pos_x = 0 #initialize x position of player object
