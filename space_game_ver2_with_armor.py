@@ -252,11 +252,6 @@ if __name__ == "__main__":
                 new_armor = Armor()
                 armors.add(new_armor)
                 all_sprites.add(new_armor)
-            
-        # Responsible for spawning armor   
-        # for entity in all_sprites:
-        #     if type(entity) == armor:
-        #         armor_check = True
 
         if time % 100 == 0 and time != 0:
             # Create the new armor and add it to sprite groups
