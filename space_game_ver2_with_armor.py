@@ -183,7 +183,7 @@ if __name__ == "__main__":
     
     # Intitialize pygame mixer to play music files
     pygame.mixer.init()
-    pygame.mixer.music.load("./assets/background_music_1.ogg")
+    pygame.mixer.music.load("./assets/background music 1.ogg")
     pygame.mixer.music.play(-1)
 
     # Set up the drawing window
