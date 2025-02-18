@@ -13,4 +13,6 @@ If you do not have it, download [Python](https://www.python.org/downloads/).  Yo
 
 Once that's downloaded, run: `pip install pygame`
 
+Run a game using this command: `python <game_name>.py`
+
 You should be ready to go!  Enjoy!
