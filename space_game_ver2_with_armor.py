@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
         self.player_pos_y = 0 #initialize y position of player object
 
     # Move the sprite based on user keypresses
-    def update(self, pressed_keys):
+    def move_player(self, pressed_keys):
         # If "UP" key pressed and we're not above the top
         if pressed_keys[K_w] and self.rect.top > 0:
             self.rect.move_ip(0, -15)
@@ -221,14 +221,16 @@ if __name__ == "__main__":
     score = 0
     time = 0
     projectile_sleep = 0
+
+    # Game loop
     while running:
         print("PLAYER.HEALTH: ", player.health)
         time += 1
         projectile_sleep += 1
 
-        # Did the user click the window close button?
+        # First, handle events
         for event in pygame.event.get():
-            # Did the user hit a key?
+            # If the user presses a key
             if event.type == KEYDOWN:
                 # Was it the Escape key? If so, stop the loop.
                 if event.key == K_ESCAPE:
@@ -265,14 +267,11 @@ if __name__ == "__main__":
             health.add(new_health)
             all_sprites.add(new_health)
 
-        # Draw a solid blue circle in the center
-        # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
-
         # Get all keys currently pressed
         pressed_keys = pygame.key.get_pressed()
 
         # Update the player sprite based on user keypress
-        player.update(pressed_keys)
+        player.move_player(pressed_keys)
         
         # if space pressed generate projectiles
         if pressed_keys[K_SPACE] and projectile_sleep > 5:
