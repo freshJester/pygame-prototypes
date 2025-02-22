@@ -113,7 +113,6 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
         # check if the enemy has hit a projectile
         if pygame.sprite.spritecollideany(self, projectiles):
-            self.kill()
             score += 1
 
 
@@ -153,15 +152,13 @@ class Projectile(pygame.sprite.Sprite):
         self.surf.fill((255,0,0)) # red
         self.speed = 20
         self.rect = self.surf.get_rect(
-            center = (player_pos_x + 60,
-                      player_pos_y + 10)
+            center = (player_pos_x + 85,
+                      player_pos_y + 35)
         )
   
     def update(self):
         self.rect.move_ip(self.speed, 0)
         if self.rect.left > SCREEN_WIDTH:
-            self.kill()
-        if pygame.sprite.spritecollideany(self, enemies):
             self.kill()
                    
 # TODO: This does not currently work
@@ -288,6 +285,9 @@ if __name__ == "__main__":
 
         #update projectile position
         projectiles.update()
+        
+        # handles collisions between projectiles and enemies
+        pygame.sprite.groupcollide(projectiles,enemies,True, True)
         
         # Erase the previous position of the player
         screen.fill((0, 0, 0))
