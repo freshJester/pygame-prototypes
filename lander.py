@@ -88,20 +88,12 @@ class Wall(pygame.sprite.Sprite):
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
     def update(self,player):
-        global ENEMIES_DEFEATED
         global score
 
         self.rect.move_ip(-self.speed, 0)
 
-        # If this enemy has gone beyond the left border, destroy it, add count to enemies defeated
-        if self.rect.right < 0:
-            self.kill()
-            ENEMIES_DEFEATED += 1
-
-            score += 1
-
-        # Check if any enemies have collided with the player
-        if pygame.sprite.spritecollideany(player, enemies,):
+        # Check if the player has collided with any walls
+        if pygame.sprite.spritecollideany(player, walls,):
             global running
             player.health -= 1
             if player.health < 1:
@@ -113,10 +105,6 @@ class Wall(pygame.sprite.Sprite):
                     with open('highscore.txt', 'w') as f:
                         f.write(str(score))
             self.kill()
-        # check if the enemy has hit a projectile
-        if pygame.sprite.spritecollideany(self, projectiles):
-            self.kill()
-            score += 1
 
 
 # Define the armor object by extending pygame.sprite.Sprite
@@ -163,7 +151,7 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.move_ip(self.speed, 0)
         if self.rect.left > SCREEN_WIDTH:
             self.kill()
-        if pygame.sprite.spritecollideany(self, enemies):
+        if pygame.sprite.spritecollideany(self, walls):
             self.kill()
                    
 # TODO: This does not currently work
@@ -203,7 +191,7 @@ if __name__ == "__main__":
     # Create groups to hold enemy sprites and all sprites, better than a list because:
     # - enemies is used for collision detection and position updates
     # - all_sprites is used for rendering
-    # enemies = pygame.sprite.Group()
+    walls = pygame.sprite.Group()
     armors = pygame.sprite.Group()
     health = pygame.sprite.Group()
     projectiles = pygame.sprite.Group()
