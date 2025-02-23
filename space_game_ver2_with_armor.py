@@ -7,6 +7,7 @@ import random
 
 # Setup the clock
 clock = pygame.time.Clock()
+player_starting_health = 1
 
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards
@@ -38,7 +39,8 @@ class Player(pygame.sprite.Sprite):
         # self.rect = self.surf.get_rect(center=(500, SCREEN_HEIGHT/2))  # Grabs a rectangle from the space on the Surface, useful for drawing the player later
         self.rect = pygame.Rect(500, SCREEN_HEIGHT/2, 75, 75)
         self.image = pygame.image.load("./assets/fish_ship.png").convert_alpha()
-        self.health = 1
+        self.health = player_starting_health
+        self.old_health = self.health
         self.player_pos_x = 0 #initialize x position of player object
         self.player_pos_y = 0 #initialize y position of player object
 
@@ -62,7 +64,7 @@ class Player(pygame.sprite.Sprite):
         
         # if 'Space" key is pressed get current position of the the player object
         # Used in Projectile Class   
-        if pressed_keys[K_SPACE]:
+        if pressed_keys[K_SPACE]:          
             self.player_pos_x = self.rect.x
             self.player_pos_y = self.rect.y
 
@@ -99,7 +101,7 @@ class Enemy(pygame.sprite.Sprite):
             score += 1
 
         # Check if any enemies have collided with the player
-        if pygame.sprite.spritecollideany(player, enemies,):
+        if pygame.sprite.spritecollide(player, enemies, True):
             global running
             player.health -= 1
             if player.health < 1:
@@ -110,7 +112,6 @@ class Enemy(pygame.sprite.Sprite):
                 if score > int(highscore):
                     with open('highscore.txt', 'w') as f:
                         f.write(str(score))
-            self.kill()
         # check if the enemy has hit a projectile
         if pygame.sprite.spritecollideany(self, projectiles):
             score += 1
@@ -218,10 +219,18 @@ if __name__ == "__main__":
     score = 0
     time = 0
     projectile_sleep = 0
+    i = 0
+    
+    # scales life bar based on starting_player_health
+    while i < player_starting_health:
+        new_health = Health(100 + i * 35 ,100)
+        health.add(new_health)
+        all_sprites.add(new_health)
+        i += 1
 
     # Game loop
     while running:
-        print("PLAYER.HEALTH: ", player.health)
+        print("PLAYER.HEALTH: ", player.health, player.old_health)
         time += 1
         projectile_sleep += 1
 
@@ -259,11 +268,18 @@ if __name__ == "__main__":
             all_sprites.add(new_armor)
 
         # TODO: I think this block is trying to draw health in, the red block(s?) in the top right
-        if player.health >= 1:
+        '''if player.health >= 1:
             new_health = Health(100,100)
             health.add(new_health)
             all_sprites.add(new_health)
-
+        '''
+        # health bar, currently doesn't decrease when health decreases
+        if player.health > player.old_health:
+            new_health = Health(100 + player.old_health * 35 ,100)
+            health.add(new_health)
+            all_sprites.add(new_health)
+            player.old_health = player.health
+            
         # Get all keys currently pressed
         pressed_keys = pygame.key.get_pressed()
 
