@@ -192,7 +192,7 @@ if __name__ == "__main__":
     # Create a custom event for adding a new enemy
     ADDENEMY = pygame.USEREVENT + 1
     # pygame.time.set_timer(ADDENEMY, 250)
-    pygame.time.set_timer(ADDENEMY, 250)  # This is the timer for when each enemy gets added
+    pygame.time.set_timer(ADDENEMY, 100)  # This is the timer for when each enemy gets added
 
     # Create a custome event for adding a armor powerup
     ADDARMOR = pygame.USEREVENT + 2
